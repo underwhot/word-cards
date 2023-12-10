@@ -355,3 +355,112 @@ body {
   width: auto;
   margin: 0 auto;
 }
+
+.flip-card {
+  background-color: transparent;
+  width: 100%;
+  height: 18.75rem;
+  /* border: 1px solid #f1f1f1; */
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  text-align: center;
+  /* background-color: #333; */
+  /* border-radius: 10px; */
+  margin-bottom: 0.9375rem;
+  font-size: 1.25rem;
+}
+
+/* This container is needed to position the front and back side */
+.flip-card__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  /* transition: transform 0.5s; */
+  transition: transform 0.5s ease;
+  transform-style: preserve-3d;
+}
+
+/* Do an horizontal flip when you move the mouse over the flip box container */
+.flip-card.flip .flip-card__inner {
+  transform: rotateY(-180deg);
+}
+
+/* Position the front and back side */
+.flip-card__front,
+.flip-card__back {
+  display: block;
+  position: absolute;
+  padding: 15px;
+  width: 100%;
+  min-height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+  border-radius: 10px;
+}
+
+.flip-card__front span,
+.flip-card__back span {
+  display: inline-block;
+  animation: wordShade 0.8s ease;
+}
+
+/* Style the front side (fallback if image is missing) */
+.flip-card__front {
+  background-color: #333;
+
+  /* color: black; */
+}
+
+/* Style the back side */
+.flip-card__back {
+  background-color: #333;
+  color: white;
+  transform: rotateY(180deg);
+}
+
+/* 
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  text-align: center;
+  background-color: #333;
+  border-radius: 10px;
+  margin-bottom: 0.9375rem;
+  font-size: 1.25rem; 
+  */
+
+  @keyframes wordShade {
+    0% {
+      opacity: 0;
+      /* transform: translateY(-10px); */
+    }
+    100% {
+      opacity: 1;
+      /* transform: translateX(0px); */
+    }
+  }

@@ -3,27 +3,31 @@ import { useEffect, useState } from 'react';
 import Button from '../UI/Button';
 
 const Body = ({ words, mainLang }) => {
-  const [currentWordLang, setCurrentWordLang] = useState(mainLang);
+  const [flipCard, setFlipCard] = useState(false);
+  // const [currentWordLang, setCurrentWordLang] = useState(mainLang);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
   const currentWord = words[currentWordIndex];
 
   useEffect(() => {
     setCurrentWordIndex(0);
-  }, [words])
+  }, [words]);
 
   useEffect(() => {
-    setCurrentWordLang(mainLang);
+    // setCurrentWordLang(mainLang);
+    mainLang === 'default' ? setFlipCard(false) : setFlipCard(true);
   }, [mainLang]);
 
   const currentWordLangHandler = () => {
-    currentWordLang === 'default'
-      ? setCurrentWordLang('alternate')
-      : setCurrentWordLang('default');
+    setFlipCard(!flipCard);
+    // currentWordLang === 'default'
+    //   ? setCurrentWordLang('alternate')
+    //   : setCurrentWordLang('default');
   };
 
   const nextWordHandler = () => {
-    setCurrentWordLang(mainLang);
+    // setCurrentWordLang(mainLang);
+    mainLang === 'default' ? setFlipCard(false) : setFlipCard(true);
     setCurrentWordIndex((prev) => {
       if (prev !== words.length - 1) {
         return prev + 1;
@@ -34,7 +38,7 @@ const Body = ({ words, mainLang }) => {
   };
 
   const prevWordHandler = () => {
-    setCurrentWordLang(mainLang);
+    // setCurrentWordLang(mainLang);
     setCurrentWordIndex((prev) => {
       if (prev !== 0) {
         return prev - 1;
@@ -50,13 +54,27 @@ const Body = ({ words, mainLang }) => {
         <span className="app__current">{currentWordIndex + 1}</span>
         <span className="app__all">{words.length}</span>
       </div>
-      <button
+      <div
         onClick={currentWordLangHandler}
-        type="button"
-        className="app__card"
+        className={`app__flip-card flip-card ${flipCard ? 'flip' : ''}`}
       >
-        {currentWord && currentWord[currentWordLang]}
-      </button>
+        <div className="flip-card__inner">
+          <button type="button" className="flip-card__front">
+            {words.length === 0 ? (
+              'Loading...'
+            ) : (
+              <span key={currentWord.default}>{currentWord.default}</span>
+            )}
+          </button>
+          <button type="button" className="flip-card__back">
+            {words.length === 0 ? (
+              'Loading...'
+            ) : (
+              <span key={currentWord.alternate}>{currentWord.alternate}</span>
+            )}
+          </button>
+        </div>
+      </div>
       <div className="app__action">
         <Button onClick={prevWordHandler}>Prev</Button>
         <Button onClick={nextWordHandler}>Next</Button>
