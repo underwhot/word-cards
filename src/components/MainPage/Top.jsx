@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Button from '../UI/Button';
 
 const Top = () => {
   return (

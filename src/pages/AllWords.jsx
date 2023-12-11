@@ -1,14 +1,21 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import Loader from '../components/UI/Loader';
+import Button from '../components/UI/Button';
+
+import { FaDeleteLeft } from 'react-icons/fa6';
 
 export const AllWords = ({
+  isLoading,
   words,
   onDeleteWordHandler,
   onAddNewWordHandler,
 }) => {
   const [defInput, setDefInput] = useState('');
   const [altInput, setAltInput] = useState('');
+
+  const isValid = !!defInput.trim() && !!altInput.trim();
 
   const wordsList = words.map((word) => (
     <WordElem
@@ -42,11 +49,19 @@ export const AllWords = ({
     setAltInput('');
   };
 
+  const loading = isLoading ? <Loader /> : null;
+  const empty = !isLoading && words.length === 0 ? <Empty /> : null;
+  const content =
+    !isLoading && words.length > 0 ? (
+      <ol reversed className="words__list">
+        {wordsList}
+      </ol>
+    ) : null;
+
   return (
     <>
       <div className="words">
         <h1 className="words__title">Words list</h1>
-
         <form className="words__form" onSubmit={onSubmitHandler}>
           <label className="words__label">
             Def:
@@ -70,16 +85,15 @@ export const AllWords = ({
               className="words__input"
             />
           </label>
-          <button type="submit" className="words__add btn">
+          <Button type="submit" disabled={!isValid}>
             Add +
-          </button>
+          </Button>
         </form>
 
-        <ol reversed className="words__list">
-          {wordsList}
-        </ol>
+        {loading}
+        {empty}
+        {content}
       </div>
-
       <Link to="/" type="button" className="home btn">
         Go home
       </Link>
@@ -90,16 +104,22 @@ export const AllWords = ({
 const WordElem = ({ defWord, altWord, id, onDeleteWordHandler }) => {
   return (
     <li className="words__item">
-      <div className="words__row">
-        <div className="words__box">{defWord}</div>
-        <div className="words__box">{altWord}</div>
+      <div className="words__box">
+        <div className="words__row">
+          <div className="words__word">{defWord}</div>
+          <div className="words__word">{altWord}</div>
+        </div>
         <button
           onClick={() => onDeleteWordHandler(id)}
-          className="words__delete"
+          className="words__delete btn"
         >
-          X
+          <FaDeleteLeft size={16} />
         </button>
       </div>
     </li>
   );
+};
+
+const Empty = () => {
+  return <div className="words__epmty">Words list is empty!</div>;
 };

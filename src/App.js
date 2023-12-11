@@ -9,8 +9,11 @@ import shuffleArray from './utils/shuffleArray';
 
 function App() {
   const [words, setWords] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
+
     async function fetchWords() {
       try {
         const res = await axios.get(
@@ -20,6 +23,8 @@ function App() {
         setWords(res.data);
       } catch (error) {
         console.error('Error fetching words:', error.message);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -36,7 +41,7 @@ function App() {
     });
 
     try {
-      const res = await axios.delete(
+      await axios.delete(
         'https://654fb2ee358230d8f0cda05a.mockapi.io/words/' + id
       );
     } catch (error) {
@@ -50,7 +55,7 @@ function App() {
     });
 
     try {
-      const res = await axios.post(
+      await axios.post(
         'https://654fb2ee358230d8f0cda05a.mockapi.io/words',
         newWord
       );
@@ -66,13 +71,18 @@ function App() {
           <Route
             path="/"
             element={
-              <Home words={words} shuffleWordsHandler={shuffleWordsHandler} />
+              <Home
+                isLoading={isLoading}
+                words={words}
+                shuffleWordsHandler={shuffleWordsHandler}
+              />
             }
           />
           <Route
             path="/all-words"
             element={
               <AllWords
+                isLoading={isLoading}
                 words={words}
                 onDeleteWordHandler={onDeleteWordHandler}
                 onAddNewWordHandler={onAddNewWordHandler}
