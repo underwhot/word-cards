@@ -16,15 +16,21 @@
   padding: 0.9375rem 1.25rem;
   background-color: #333;
   border-radius: 0.625rem;
-  -webkit-transition: -webkit-transform 0.1s ease 0s;
-  transition: -webkit-transform 0.1s ease 0s;
-  transition: transform 0.1s ease 0s;
-  transition: transform 0.1s ease 0s, -webkit-transform 0.1s ease 0s;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-box-shadow: -2px -2px 3px #555, 2px 2px 3px #222, 1px -1px 3px #555,
+    -1px 1px 3px #555, inset 2px 2px 3px #555, inset -2px -2px 3px #222;
+  box-shadow: -2px -2px 3px #555, 2px 2px 3px #222, 1px -1px 3px #555,
+    -1px 1px 3px #555, inset 2px 2px 3px #555, inset -2px -2px 3px #222;
+  -webkit-transition: all 0.1s ease 0s;
+  -o-transition: all 0.1s ease 0s;
+  transition: all 0.1s ease 0s;
 }
 .button:active {
-  -webkit-transform: scale(0.95);
-  -ms-transform: scale(0.95);
-  transform: scale(0.95);
+  background-color: #303030;
+  -webkit-box-shadow: 2px 2px 3px #555, -2px -2px 3px #222, -1px 1px 3px #555,
+    1px -1px 3px #555, inset -2px -2px 3px #555, inset 2px 2px 3px #222;
+  box-shadow: 2px 2px 3px #555, -2px -2px 3px #222, -1px 1px 3px #555,
+    1px -1px 3px #555, inset -2px -2px 3px #555, inset 2px 2px 3px #222;
 }
 .button:disabled {
   opacity: 0.5;
@@ -32,7 +38,10 @@
 }
 
 .button:disabled:active {
-  -webkit-transform: none;
-  -ms-transform: none;
-  transform: none;
+  background-color: #333;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-box-shadow: -2px -2px 3px #555, 2px 2px 3px #222, 1px -1px 3px #555,
+    -1px 1px 3px #555, inset 2px 2px 3px #555, inset -2px -2px 3px #222;
+  box-shadow: -2px -2px 3px #555, 2px 2px 3px #222, 1px -1px 3px #555,
+    -1px 1px 3px #555, inset 2px 2px 3px #555, inset -2px -2px 3px #222;
 }

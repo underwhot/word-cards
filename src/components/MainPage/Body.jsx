@@ -6,7 +6,12 @@ import Button from '../UI/Button';
 import Loader from '../UI/Loader';
 
 const Body = ({ isLoading, words, mainLang }) => {
-  const storedCurrentWordIndex = localStorage.getItem('currentWordIndex');
+  let storedCurrentWordIndex = localStorage.getItem('currentWordIndex');
+
+  if (words.length && storedCurrentWordIndex >= words.length - 1) {
+    console.log(words.length);
+    storedCurrentWordIndex = words.length - 1;
+  }
 
   const [flipCard, setFlipCard] = useState(false);
   const [currentWordIndex, setCurrentWordIndex] = useState(
@@ -26,7 +31,7 @@ const Body = ({ isLoading, words, mainLang }) => {
     mainLang === 'default' ? setFlipCard(false) : setFlipCard(true);
   }, [mainLang]);
 
-  const currentWordLangHandler = () => {
+  const toggleCurrentWordLangHandler = () => {
     setFlipCard(!flipCard);
   };
 
@@ -54,8 +59,11 @@ const Body = ({ isLoading, words, mainLang }) => {
   const resetCurrentWordIndexHandler = () => {
     setCurrentWordIndex(0);
     setAnimationToggle((prev) => !prev);
-    if (flipCard) {
+    if (mainLang === 'default') {
       setFlipCard(false);
+    }
+    if (mainLang === 'alternate') {
+      setFlipCard(true);
     }
   };
 
@@ -66,7 +74,7 @@ const Body = ({ isLoading, words, mainLang }) => {
       <WordButton
         currentWordDef={currentWordDef}
         currentWordAlt={currentWordAlt}
-        currentWordLangHandler={currentWordLangHandler}
+        currentWordLangHandler={toggleCurrentWordLangHandler}
         flipCard={flipCard}
       />
     ) : null;
@@ -75,6 +83,7 @@ const Body = ({ isLoading, words, mainLang }) => {
     <div className="app__body">
       <div className="app__top">
         <button
+          disabled={words.length === 0 || currentWordIndex === 0}
           title="Reset words counter"
           onClick={resetCurrentWordIndexHandler}
           type="button"
@@ -94,14 +103,12 @@ const Body = ({ isLoading, words, mainLang }) => {
           <span className="app__all">{words.length}</span>
         </div>
       </div>
-      <div
-        onClick={currentWordLangHandler}
-        className={`app__flip-card flip-card ${flipCard ? 'flip' : ''}`}
-      >
+      <div className="app__flip-card flip-card">
         {loading}
         {empty}
         {content}
       </div>
+
       <div className="app__action">
         <Button onClick={prevWordHandler} disabled={words.length === 0}>
           Prev
@@ -116,26 +123,34 @@ const Body = ({ isLoading, words, mainLang }) => {
 
 export default Body;
 
-const WordButton = ({ currentWordDef, currentWordAlt }) => {
+const WordButton = ({
+  currentWordDef,
+  currentWordAlt,
+  currentWordLangHandler,
+  flipCard,
+}) => {
   return (
-    <div className="flip-card__inner">
-      <button type="button" className="flip-card__front">
-        <span key={currentWordDef}>{currentWordDef}</span>
-      </button>
-      <button type="button" className="flip-card__back">
-        <span key={currentWordAlt}>{currentWordAlt}</span>
-      </button>
+    <div
+      onClick={currentWordLangHandler}
+      className={`flip-card__body ${flipCard ? 'flip' : ''}`}
+    >
+      <div className="flip-card__inner">
+        <button type="button" className="flip-card__front">
+          <span key={currentWordDef}>{currentWordDef}</span>
+        </button>
+        <button type="button" className="flip-card__back">
+          <span key={currentWordAlt}>{currentWordAlt}</span>
+        </button>
+      </div>
     </div>
   );
 };
 
 const Empty = () => {
   return (
-    <div className="flip-card__inner">
-      <Link to="/all-words" className="flip-card__empty">
-        No words found. <br />
-        Click here to add new one
-      </Link>
-    </div>
+    <Link to="all-words" className="flip-card__empty">
+      No words found. <br />
+      Click here to add new one
+    </Link>
   );
 };
